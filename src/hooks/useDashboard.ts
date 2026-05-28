@@ -21,22 +21,22 @@ export const useDashboard = () => {
       const currentMonth = getCurrentMonth()
 
       // Calculate current month income
-      const currentSalary = salaries.find((s) => s.month === currentMonth)
+      const currentSalary = salaries.find((s: Salary) => s.month === currentMonth)
       const totalIncome = currentSalary
         ? currentSalary.salary + currentSalary.bonus + currentSalary.otherIncome
         : 0
 
       // Calculate current month expenses
-      const currentMonthExpenses = expenses.filter((e) =>
+      const currentMonthExpenses = expenses.filter((e: Expense) =>
         isDateInMonth(e.date, currentMonth)
       )
       const totalExpenses = currentMonthExpenses.reduce(
-        (sum, e) => sum + e.amount,
+        (sum: number, e: Expense) => sum + e.amount,
         0
       )
 
       // Calculate total savings
-      const totalSavings = savings.reduce((sum, s) => sum + s.currentAmount, 0)
+      const totalSavings = savings.reduce((sum: number, s: any) => sum + s.currentAmount, 0)
 
       // Calculate remaining balance
       const remainingBalance = totalIncome - totalExpenses - totalSavings
@@ -47,8 +47,8 @@ export const useDashboard = () => {
         .slice(0, 10)
 
       // Group expenses by category
-      const expensesByCategory = currentMonthExpenses.reduce((acc, expense) => {
-        const existing = acc.find((e) => e.category === expense.category)
+      const expensesByCategory = currentMonthExpenses.reduce((acc: { category: string; amount: number }[], expense: Expense) => {
+        const existing = acc.find((e: { category: string; amount: number }) => e.category === expense.category)
         if (existing) {
           existing.amount += expense.amount
         } else {
@@ -87,14 +87,14 @@ function calculateMonthlyTrend(
     const monthDate = new Date(date.getFullYear(), date.getMonth() - i, 1)
     const monthStr = monthDate.toISOString().slice(0, 7)
 
-    const monthSalary = salaries.find((s) => s.month === monthStr)
+    const monthSalary = salaries.find((s: Salary) => s.month === monthStr)
     const income = monthSalary
       ? monthSalary.salary + monthSalary.bonus + monthSalary.otherIncome
       : 0
 
     const monthExpenses = expenses
-      .filter((e) => isDateInMonth(e.date, monthStr))
-      .reduce((sum, e) => sum + e.amount, 0)
+      .filter((e: Expense) => isDateInMonth(e.date, monthStr))
+      .reduce((sum: number, e: Expense) => sum + e.amount, 0)
 
     months.push({
       month: monthDate.toLocaleDateString('en-US', { month: 'short' }),

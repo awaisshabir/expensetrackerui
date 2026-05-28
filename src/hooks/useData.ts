@@ -37,7 +37,7 @@ export const useUpdateExpense = () => {
 
   return useMutation({
     mutationFn: ({ expense }: { expense: Expense }) =>
-      expensesAPI.update(expense.id, expense),
+      expensesAPI.update(expense.id || expense._id || '', expense),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
@@ -86,7 +86,7 @@ export const useUpdateSalary = () => {
 
   return useMutation({
     mutationFn: ({ salary }: { salary: Salary }) =>
-      salaryAPI.update(salary.id, salary),
+      salaryAPI.update(salary.id || salary._id || salary.month, salary),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['salaries'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })

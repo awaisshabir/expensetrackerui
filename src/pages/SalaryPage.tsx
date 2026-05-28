@@ -59,7 +59,6 @@ const SalaryPage = () => {
     if (editingSalary) {
       await updateSalary.mutateAsync({
         salary: salaryData,
-        rowIndex: editingSalary.index,
       })
     } else {
       await addSalary.mutateAsync(salaryData)
@@ -68,7 +67,7 @@ const SalaryPage = () => {
     setIsModalOpen(false)
   }
 
-  const currentMonthSalary = salaries?.find((s) => s.month === getCurrentMonth())
+  const currentMonthSalary = salaries?.find((s: Salary) => s.month === getCurrentMonth())
 
   if (isLoading) {
     return (

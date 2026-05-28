@@ -3,6 +3,7 @@ import LoadingSpinner from '@/components/LoadingSpinner'
 import StatCard from '@/components/StatCard'
 import { formatCurrency, formatDate } from '@/utils/helpers'
 import { useAuthStore } from '@/store/authStore'
+import { Expense } from '@/types'
 import { DollarSign, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 import {
   BarChart,
@@ -103,7 +104,7 @@ const DashboardPage = () => {
                   fill="#8884d8"
                   dataKey="amount"
                 >
-                  {dashboardData.expensesByCategory.map((entry, index) => (
+                  {dashboardData.expensesByCategory.map((_entry: { category: string; amount: number }, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -167,7 +168,7 @@ const DashboardPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {dashboardData.recentExpenses.map((expense, index) => (
+                {dashboardData.recentExpenses.map((expense: Expense, index: number) => (
                   <tr
                     key={expense.id}
                     className={

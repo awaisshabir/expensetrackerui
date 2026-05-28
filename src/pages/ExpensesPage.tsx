@@ -22,18 +22,18 @@ const ExpensesPage = () => {
 
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
-    category: EXPENSE_CATEGORIES[0],
+    category: EXPENSE_CATEGORIES[0] as string,
     amount: '',
-    paymentMethod: PAYMENT_METHODS[0],
+    paymentMethod: PAYMENT_METHODS[0] as string,
     notes: '',
   })
 
   const handleOpenModal = () => {
     setFormData({
       date: new Date().toISOString().split('T')[0],
-      category: EXPENSE_CATEGORIES[0],
+      category: EXPENSE_CATEGORIES[0] as string,
       amount: '',
-      paymentMethod: PAYMENT_METHODS[0],
+      paymentMethod: PAYMENT_METHODS[0] as string,
       notes: '',
     })
     setEditingExpense(null)
@@ -69,7 +69,6 @@ const ExpensesPage = () => {
           paymentMethod: formData.paymentMethod,
           notes: formData.notes,
         },
-        rowIndex: editingExpense.index,
       })
     } else {
       await addExpense.mutateAsync({
@@ -84,13 +83,13 @@ const ExpensesPage = () => {
     setIsModalOpen(false)
   }
 
-  const handleDeleteExpense = async (id: string) => {
-    if (confirm('Are you sure you want to delete this expense?')) {
+  const handleDeleteExpense = async (id: string | undefined) => {
+    if (id && confirm('Are you sure you want to delete this expense?')) {
       await deleteExpense.mutateAsync(id)
     }
   }
 
-  const filteredExpenses = expenses?.filter((expense) => {
+  const filteredExpenses = expenses?.filter((expense: Expense) => {
     const matchesSearch =
       expense.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
       expense.notes.toLowerCase().includes(searchQuery.toLowerCase())
@@ -98,7 +97,7 @@ const ExpensesPage = () => {
     return matchesSearch && matchesCategory
   }) || []
 
-  const totalExpenses = filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0)
+  const totalExpenses = filteredExpenses.reduce((sum: number, exp: Expense) => sum + exp.amount, 0)
 
   if (isLoading) {
     return (
@@ -148,7 +147,7 @@ const ExpensesPage = () => {
               className="input pl-10"
             >
               <option value="all">All Categories</option>
-              {EXPENSE_CATEGORIES.map((category) => (
+              {EXPENSE_CATEGORIES.map((category: string) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -196,7 +195,7 @@ const ExpensesPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredExpenses.map((expense) => (
+                {filteredExpenses.map((expense: Expense) => (
                   <tr
                     key={expense.id || expense._id}
                     className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
@@ -272,7 +271,7 @@ const ExpensesPage = () => {
               className="input"
               required
             >
-              {EXPENSE_CATEGORIES.map((category) => (
+              {EXPENSE_CATEGORIES.map((category: string) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -302,7 +301,7 @@ const ExpensesPage = () => {
               className="input"
               required
             >
-              {PAYMENT_METHODS.map((method) => (
+              {PAYMENT_METHODS.map((method: string) => (
                 <option key={method} value={method}>
                   {method}
                 </option>

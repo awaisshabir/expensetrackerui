@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useExpenses, useSalaries, useSavings } from '@/hooks/useData'
+import { Expense } from '@/types'
 import { exportAPI } from '@/services/api'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { formatCurrency, getCurrentMonth, isDateInMonth, formatMonth } from '@/utils/helpers'
@@ -20,22 +21,22 @@ const ReportsPage = () => {
   const isLoading = expensesLoading || salariesLoading || savingsLoading
 
   // Get available months from salaries
-  const availableMonths = salaries?.map((s) => s.month).sort().reverse() || [getCurrentMonth()]
+  const availableMonths = salaries?.map((s: any) => s.month).sort().reverse() || [getCurrentMonth()]
 
   // Filter data for selected month
-  const monthExpenses = expenses?.filter((exp) => isDateInMonth(exp.date, selectedMonth)) || []
-  const monthSalary = salaries?.find((s) => s.month === selectedMonth)
-  const totalSavings = savings?.reduce((sum, s) => sum + s.currentAmount, 0) || 0
+  const monthExpenses = expenses?.filter((exp: Expense) => isDateInMonth(exp.date, selectedMonth)) || []
+  const monthSalary = salaries?.find((s: any) => s.month === selectedMonth)
+  const totalSavings = savings?.reduce((sum: number, s: any) => sum + s.currentAmount, 0) || 0
 
   // Calculate summary
   const totalIncome = monthSalary
     ? monthSalary.salary + monthSalary.bonus + monthSalary.otherIncome
     : 0
-  const totalExpenses = monthExpenses.reduce((sum, exp) => sum + exp.amount, 0)
+  const totalExpenses = monthExpenses.reduce((sum: number, exp: Expense) => sum + exp.amount, 0)
   const remainingBalance = totalIncome - totalExpenses - totalSavings
 
-  const expensesByCategory = (monthExpenses || []).reduce((acc, expense) => {
-    const existing = acc.find((e) => e.category === expense.category)
+  const expensesByCategory = (monthExpenses || []).reduce((acc: { category: string; amount: number }[], expense: Expense) => {
+    const existing = acc.find((e: { category: string; amount: number }) => e.category === expense.category)
     if (existing) {
       existing.amount += expense.amount
     } else {
@@ -113,7 +114,7 @@ const ReportsPage = () => {
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 className="input pl-10"
               >
-                {availableMonths.map((month) => (
+                {availableMonths.map((month: string) => (
                   <option key={month} value={month}>
                     {formatMonth(month + '-01')}
                   </option>
@@ -255,7 +256,7 @@ const ReportsPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {expensesByCategory.map((expense, index) => (
+                  {expensesByCategory.map((expense: { category: string; amount: number }, index: number) => (
                     <tr
                       key={expense.category}
                       className={

@@ -17,6 +17,8 @@ export interface Expense {
 }
 
 export interface Salary {
+  id?: string;
+  _id?: string;
   month: string;
   salary: number;
   bonus: number;

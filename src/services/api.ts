@@ -15,15 +15,15 @@ const getToken = () => {
 }
 
 // API request helper
-export const apiRequest = async (endpoint, options = {}) => {
+export const apiRequest = async (endpoint: string, options: RequestInit = {}): Promise<any> => {
   const token = getToken()
   
-  const config = {
+  const config: RequestInit = {
     ...options,
     headers: {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
-      ...options.headers,
+      ...(options.headers as Record<string, string>),
     },
   }
 
@@ -44,14 +44,14 @@ export const apiRequest = async (endpoint, options = {}) => {
 
 // Auth API
 export const authAPI = {
-  register: async (name, email, password) => {
+  register: async (name: string, email: string, password: string) => {
     return apiRequest('/auth/register', {
       method: 'POST',
       body: JSON.stringify({ name, email, password }),
     })
   },
 
-  login: async (email, password) => {
+  login: async (email: string, password: string) => {
     return apiRequest('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
@@ -72,36 +72,36 @@ export const authAPI = {
 
 // Expenses API
 export const expensesAPI = {
-  getAll: async (params = {}) => {
+  getAll: async (params: Record<string, any> = {}) => {
     const query = new URLSearchParams(params).toString()
     return apiRequest(`/expenses${query ? `?${query}` : ''}`)
   },
 
-  getById: async (id) => {
+  getById: async (id: string) => {
     return apiRequest(`/expenses/${id}`)
   },
 
-  create: async (data) => {
+  create: async (data: any) => {
     return apiRequest('/expenses', {
       method: 'POST',
       body: JSON.stringify(data),
     })
   },
 
-  update: async (id, data) => {
+  update: async (id: string, data: any) => {
     return apiRequest(`/expenses/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     })
   },
 
-  delete: async (id) => {
+  delete: async (id: string) => {
     return apiRequest(`/expenses/${id}`, {
       method: 'DELETE',
     })
   },
 
-  getStats: async (params = {}) => {
+  getStats: async (params: Record<string, any> = {}) => {
     const query = new URLSearchParams(params).toString()
     return apiRequest(`/expenses/stats${query ? `?${query}` : ''}`)
   },
@@ -109,36 +109,36 @@ export const expensesAPI = {
 
 // Salary API
 export const salaryAPI = {
-  getAll: async (params = {}) => {
+  getAll: async (params: Record<string, any> = {}) => {
     const query = new URLSearchParams(params).toString()
     return apiRequest(`/salary${query ? `?${query}` : ''}`)
   },
 
-  getById: async (id) => {
+  getById: async (id: string) => {
     return apiRequest(`/salary/${id}`)
   },
 
-  create: async (data) => {
+  create: async (data: any) => {
     return apiRequest('/salary', {
       method: 'POST',
       body: JSON.stringify(data),
     })
   },
 
-  update: async (id, data) => {
+  update: async (id: string, data: any) => {
     return apiRequest(`/salary/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     })
   },
 
-  delete: async (id) => {
+  delete: async (id: string) => {
     return apiRequest(`/salary/${id}`, {
       method: 'DELETE',
     })
   },
 
-  getStats: async (params = {}) => {
+  getStats: async (params: Record<string, any> = {}) => {
     const query = new URLSearchParams(params).toString()
     return apiRequest(`/salary/stats${query ? `?${query}` : ''}`)
   },
@@ -146,36 +146,36 @@ export const salaryAPI = {
 
 // Savings API
 export const savingsAPI = {
-  getAll: async (params = {}) => {
+  getAll: async (params: Record<string, any> = {}) => {
     const query = new URLSearchParams(params).toString()
     return apiRequest(`/savings${query ? `?${query}` : ''}`)
   },
 
-  getById: async (id) => {
+  getById: async (id: string) => {
     return apiRequest(`/savings/${id}`)
   },
 
-  create: async (data) => {
+  create: async (data: any) => {
     return apiRequest('/savings', {
       method: 'POST',
       body: JSON.stringify(data),
     })
   },
 
-  update: async (id, data) => {
+  update: async (id: string, data: any) => {
     return apiRequest(`/savings/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     })
   },
 
-  delete: async (id) => {
+  delete: async (id: string) => {
     return apiRequest(`/savings/${id}`, {
       method: 'DELETE',
     })
   },
 
-  addAmount: async (id, amount) => {
+  addAmount: async (id: string, amount: number) => {
     return apiRequest(`/savings/${id}/add`, {
       method: 'POST',
       body: JSON.stringify({ amount }),
@@ -185,7 +185,7 @@ export const savingsAPI = {
 
 // Export API
 export const exportAPI = {
-  downloadExcel: async (params = {}) => {
+  downloadExcel: async (params: Record<string, any> = {}) => {
     const token = getToken()
     const query = new URLSearchParams(params).toString()
     
@@ -219,7 +219,7 @@ export const exportAPI = {
     window.URL.revokeObjectURL(url)
   },
 
-  downloadPDF: async (params = {}) => {
+  downloadPDF: async (params: Record<string, any> = {}) => {
     const token = getToken()
     const query = new URLSearchParams(params).toString()
     
